@@ -19,12 +19,18 @@
             android:background="#708F30"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/txtNomePlanta"
+            <ImageButton
+                android:id="@+id/btnVoltar2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:backgroundTint="#708F30"
+                app:srcCompat="@drawable/vooltar" />
+
+            <TextView
+                android:id="@+id/txtNomePlanta"
+                android:layout_width="188dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:text="Nome da planta"
                 android:textSize="16sp"
@@ -44,7 +50,7 @@
 
             <TextView
                 android:id="@+id/txtMoedas"
-                android:layout_width="86dp"
+                android:layout_width="68dp"
                 android:layout_height="57dp"
                 android:gravity="center_vertical"
                 android:textAlignment="textStart"
@@ -142,7 +148,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="67dp" />
+            android:layout_height="111dp" />
 
         <TextView
             android:id="@+id/textView6"

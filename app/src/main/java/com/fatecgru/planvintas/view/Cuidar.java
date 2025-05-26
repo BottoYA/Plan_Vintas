@@ -22,7 +22,7 @@ public class Cuidar extends AppCompatActivity {
 
     TextView txtNomePlanta, txtMoedas;
     ImageView imagemPlanta;
-    ImageButton btnRegar, btnLuz, btnSombra, btnInfo, btnLoja;
+    ImageButton btnRegar, btnLuz, btnSombra, btnInfo, btnLoja, btnVoltar2;
     //Button btnExcluir;
 
     @Override
@@ -44,6 +44,7 @@ public class Cuidar extends AppCompatActivity {
         btnSombra = findViewById(R.id.btnSombra);
         btnInfo = findViewById(R.id.btnInfo);
         btnLoja = findViewById(R.id.btnLoja);
+        btnVoltar2 = findViewById(R.id.btnVoltar2);
 
         String nomePlanta = getIntent().getStringExtra("nome_planta");
         int idPlanta = getIntent().getIntExtra("id_planta", -1);
@@ -76,8 +77,19 @@ public class Cuidar extends AppCompatActivity {
         btnLoja.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(getApplicationContext(), Loja.class);
-                startActivity(it);
+
+                Intent intent = new Intent(getApplicationContext(), Loja.class);
+                intent.putExtra("id_planta", idPlanta);
+                intent.putExtra("idade_planta", idade);
+                intent.putExtra("moedas_planta",moedas);
+                startActivity(intent);
+            }
+        });
+
+        btnVoltar2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

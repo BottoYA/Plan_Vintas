@@ -74,4 +74,5 @@ public class PlantaDAO {
     public void deletar(int id) {
         banco.delete("planta", "id = ?", new String[]{String.valueOf(id)});
     }
+
 }

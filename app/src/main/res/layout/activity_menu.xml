@@ -5,12 +5,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FEFFE9"
     android:backgroundTint="#FEFFE9"
     tools:context=".view.Menu">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FEFFE9"
+        android:backgroundTint="#FEFFE9"
         android:orientation="vertical">
 
         <TextView
@@ -33,6 +36,8 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="468dp"
+            android:background="#FEFFE9"
+            android:backgroundTint="#FEFFE9"
             android:padding="8dp" />
 
         <Space
@@ -42,11 +47,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="94dp"
+            android:gravity="center"
             android:orientation="horizontal">
-
-            <Space
-                android:layout_width="65dp"
-                android:layout_height="match_parent" />
 
             <ImageButton
                 android:id="@+id/btnSair"
@@ -67,10 +69,6 @@
                 android:background="@drawable/botaoarredondado"
                 android:backgroundTint="#A5C23F"
                 app:srcCompat="@drawable/growingseed" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
 
         </LinearLayout>
 
