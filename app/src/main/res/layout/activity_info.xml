@@ -12,16 +12,31 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView8"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="57dp"
+            android:layout_height="wrap_content"
             android:background="#708F30"
-            android:gravity="center_vertical"
-            android:text="Informações Gerais"
-            android:textAlignment="center"
-            android:textColor="#223423"
-            android:textSize="24sp" />
+            android:backgroundTint="#708F30"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnVoltar3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:backgroundTint="#708F30"
+                app:srcCompat="@drawable/vooltar" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:background="#708F30"
+                android:gravity="center_vertical"
+                android:text="Informações Gerais"
+                android:textAlignment="center"
+                android:textColor="#223423"
+                android:textSize="24sp" />
+        </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
