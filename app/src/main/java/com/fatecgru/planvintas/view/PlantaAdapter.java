@@ -39,7 +39,13 @@ public class PlantaAdapter extends RecyclerView.Adapter<PlantaAdapter.PlantaView
 
         holder.txtNome.setText(planta.getNome());
         holder.txtEspecie.setText(planta.getEspecie());
-        holder.imgPlanta.setImageResource(planta.getImagemPlanta()); // Usa seu método da classe Planta
+
+        // Verificar se o método getImagemPlanta() está implementado na classe Planta e retorna um drawable válido
+        if (planta.getImagemPlanta() != 0) {
+            holder.imgPlanta.setImageResource(planta.getImagemPlanta());
+        } else {
+            holder.imgPlanta.setImageResource(R.drawable.ic_launcher_foreground); // Imagem padrão caso não tenha
+        }
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, Cuidar.class);
@@ -56,8 +62,7 @@ public class PlantaAdapter extends RecyclerView.Adapter<PlantaAdapter.PlantaView
         return listaPlantas.size();
     }
 
-    public class PlantaViewHolder extends RecyclerView.ViewHolder {
-
+    public static class PlantaViewHolder extends RecyclerView.ViewHolder {
         TextView txtNome, txtEspecie;
         ImageView imgPlanta;
 
@@ -67,7 +72,5 @@ public class PlantaAdapter extends RecyclerView.Adapter<PlantaAdapter.PlantaView
             txtEspecie = itemView.findViewById(R.id.txtEspecie);
             imgPlanta = itemView.findViewById(R.id.imgPlanta);
         }
-
-
     }
 }

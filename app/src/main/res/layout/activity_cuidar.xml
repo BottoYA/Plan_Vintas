@@ -61,7 +61,56 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="147dp" />
+            android:layout_height="18dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtCidade"
+                android:layout_width="153dp"
+                android:layout_height="53dp"
+                android:background="@drawable/fundo_clima"
+                android:gravity="center"
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="20sp" />
+
+            <Space
+                android:layout_width="26dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/txtClima"
+                android:layout_width="205dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/fundo_clima"
+                android:gravity="center"
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="86dp" />
+
+        <TextView
+            android:id="@+id/txtRegar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/btnExcluir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
 
         <ImageView
             android:id="@+id/imagemPlanta"
