@@ -5,6 +5,7 @@ import com.fatecgru.planvintas.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class Planta {
@@ -18,6 +19,16 @@ public class Planta {
     private int qtdRegarHoje;
     private int qtdSolHoje;
     private int qtdSombraHoje;
+    private List<Missao> missoes;
+
+    public List<Missao> getMissoes() {
+        return missoes;
+    }
+
+    public void setMissoes(List<Missao> missoes) {
+        this.missoes = missoes;
+    }
+
 
 
 
@@ -146,4 +157,9 @@ public class Planta {
             return 0;
         }
     }
+
+    public void adicionarMoedas(int quantidade) {
+        this.moedas += quantidade;
+    }
+
 }

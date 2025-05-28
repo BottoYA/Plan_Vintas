@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ConnectionFactory extends SQLiteOpenHelper {
 
     private static final String NOME_BANCO = "bd_plantinhas";
-    private static final int VERSAO = 2;  // Aumenta a versão (era 1)
+    private static final int VERSAO = 3;
 
     public ConnectionFactory(Context context) {
         super(context, NOME_BANCO, null, VERSAO);
@@ -28,14 +28,35 @@ public class ConnectionFactory extends SQLiteOpenHelper {
                 "ultimaAtualizacao TEXT);";
 
         db.execSQL(sql);
+
+        String sqlMissao = "CREATE TABLE missao (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "descricao TEXT NOT NULL, " +
+                "recompensa INTEGER NOT NULL, " +
+                "status TEXT NOT NULL," +       // Exemplo: 'pendente', 'concluida', etc.
+                "plantaId INTEGER NOT NULL," + // FK para planta
+                "FOREIGN KEY(plantaId) REFERENCES planta(id)" +
+                ");";
+        db.execSQL(sqlMissao);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // 🔥 Simples, mas apaga tudo. Usado apenas para testes ou versões iniciais.
-        db.execSQL("DROP TABLE IF EXISTS planta");
-        onCreate(db);
+        if (oldVersion < 4) {  // Supondo que versão 4 é para missões
+            String sqlMissao = "CREATE TABLE missao (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "descricao TEXT NOT NULL, " +
+                    "recompensa INTEGER NOT NULL, " +
+                    "status TEXT NOT NULL," +
+                    "plantaId INTEGER NOT NULL," +
+                    "FOREIGN KEY(plantaId) REFERENCES planta(id)" +
+                    ");";
+            db.execSQL(sqlMissao);
+        }
+        // Atualize a versão para 4 no seu NOME_BANCO, por exemplo.
     }
+
+
 }
 
 

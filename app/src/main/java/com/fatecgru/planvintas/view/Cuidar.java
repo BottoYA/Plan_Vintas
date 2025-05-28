@@ -2,10 +2,13 @@ package com.fatecgru.planvintas.view;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Geocoder;
+import android.graphics.Color;
 import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,35 +30,42 @@ import com.fatecgru.planvintas.util.ClimaUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class Cuidar extends AppCompatActivity {
 
-    TextView txtNomePlanta, txtMoedas, txtClima, txtCidade, txtRegar;
+    TextView txtNomePlanta, txtMoedas, txtClima, txtCidade, txtRegar, txtSol, txtSombra;
     ImageView imagemPlanta;
     ImageButton btnRegar, btnLuz, btnSombra, btnInfo, btnLoja, btnVoltar2;
-    Button btnExcluir;
+    //Button btnExcluir;
 
     FusedLocationProviderClient fusedLocationClient;
-
     ActivityResultLauncher<String> requestPermissionLauncher;
+
+    private Hortela hortela;
+
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cuidar);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Inicializa views
+        // ----- INICIALIZA VIEWS -----
         txtNomePlanta = findViewById(R.id.txtNomePlanta);
         txtMoedas = findViewById(R.id.txtMoedas);
-        txtClima = findViewById(R.id.txtClima); // Certifique-se que existe no XML
-        txtCidade = findViewById(R.id.txtCidade); // Certifique-se que existe no XML
+        txtClima = findViewById(R.id.txtClima);
+        txtCidade = findViewById(R.id.txtCidade);
         imagemPlanta = findViewById(R.id.imagemPlanta);
         btnRegar = findViewById(R.id.btnRegar);
         btnLuz = findViewById(R.id.btnLuz);
@@ -63,53 +73,76 @@ public class Cuidar extends AppCompatActivity {
         btnInfo = findViewById(R.id.btnInfo);
         btnLoja = findViewById(R.id.btnLoja);
         btnVoltar2 = findViewById(R.id.btnVoltar2);
-        btnExcluir = findViewById(R.id.btnExcluir);
+        //btnExcluir = findViewById(R.id.btnExcluir);
         txtRegar = findViewById(R.id.txtRegar);
+        txtSol = findViewById(R.id.txtSol);
+        txtSombra = findViewById(R.id.txtSombra);
 
+        // ----- SHARED PREFERENCES -----
+        preferences = getSharedPreferences("MissoesPref", MODE_PRIVATE);
+        editor = preferences.edit();
 
-
-
-        // Dados da planta vindos da Intent
+        // ----- RECEBE DADOS DA INTENT -----
         String nomePlanta = getIntent().getStringExtra("nome_planta");
         int idPlanta = getIntent().getIntExtra("id_planta", -1);
         int idade = getIntent().getIntExtra("idade_planta", 0);
-        int moedas = getIntent().getIntExtra("moedas_planta", 0);
+        String cor = getIntent().getStringExtra("cor");
 
-        txtNomePlanta.setText(nomePlanta);
-        txtMoedas.setText(moedas + "x");
 
-        int imagem = R.drawable.plantaa;
-        if (idade <= 5) {
-            imagem = R.drawable.plantaa;
-        } else if (idade <= 15) {
-            imagem = R.drawable.plantab;
-        } else if (idade <= 30) {
-            imagem = R.drawable.plantac;
-        } else {
-            imagem = R.drawable.plantad;
-        }
-        imagemPlanta.setImageResource(imagem);
 
-        btnInfo.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), Info.class));
-        });
+
+
+        // ----- CRIA PLANTA -----
+        hortela = new Hortela();
+        hortela.setId(idPlanta);
+        hortela.setIdadeDias(idade);
+        hortela.setCorVaso(cor);
+
+        PlantaDAO dao = new PlantaDAO(getApplicationContext());
+        hortela = (Hortela) dao.buscarPorId(idPlanta);
+
+        txtNomePlanta.setText(hortela.getNome());
+        txtMoedas.setText(hortela.getMoedas() + "x");
+        imagemPlanta.setImageResource(hortela.getImagemPlanta());
+
+
+        txtMoedas.setText(hortela.getMoedas() + "x");
+        imagemPlanta.setImageResource(hortela.getImagemPlanta());
+
+        // ----- VERIFICA MISSÕES -----
+        boolean regaPendente = preferences.getBoolean("regaPendente_" + hortela.getId(), true);
+        boolean solPendente = preferences.getBoolean("solPendente_" + hortela.getId(), true);
+        boolean sombraPendente = preferences.getBoolean("sombraPendente_" + hortela.getId(), true);
+
+        if (!regaPendente) txtRegar.setTextColor(Color.TRANSPARENT);
+        if (!solPendente) txtSol.setTextColor(Color.TRANSPARENT);
+        if (!sombraPendente) txtSombra.setTextColor(Color.TRANSPARENT);
+
+        // ----- BOTÕES DE MISSÃO -----
+        btnRegar.setOnClickListener(v -> realizarMissao("regaPendente_", txtRegar, "regar"));
+        btnLuz.setOnClickListener(v -> realizarMissao("solPendente_", txtSol, "sol"));
+        btnSombra.setOnClickListener(v -> realizarMissao("sombraPendente_", txtSombra, "sombra"));
+
+        // ----- OUTROS BOTÕES -----
+        btnInfo.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), Info.class)));
 
         btnLoja.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), Loja.class);
-            intent.putExtra("id_planta", idPlanta);
-            intent.putExtra("idade_planta", idade);
-            intent.putExtra("moedas_planta", moedas);
+            intent.putExtra("id_planta", hortela.getId());
+            intent.putExtra("idade_planta", hortela.getIdadeDias());
+            intent.putExtra("moedas_planta", hortela.getMoedas());
             startActivity(intent);
         });
 
         btnVoltar2.setOnClickListener(v -> finish());
 
-        btnExcluir.setOnClickListener(v -> {
+        /*btnExcluir.setOnClickListener(v -> {
             PlantaDAO dao = new PlantaDAO(getApplicationContext());
-            dao.deletar(idPlanta);
+            dao.deletar(hortela.getId());
             finish();
-        });
+        });*/
 
+        // ----- LOCALIZAÇÃO E CLIMA -----
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         requestPermissionLauncher = registerForActivityResult(
@@ -125,8 +158,32 @@ public class Cuidar extends AppCompatActivity {
                 });
 
         checarPermissaoLocalizacao();
+
+        // ----- RESETAR MISSÕES DIARIAS -----
+        resetarMissoesSeForNovoDia();
     }
 
+    // ----- FUNÇÃO PARA REALIZAR MISSÃO -----
+    private void realizarMissao(String chave, TextView textoMissao, String nomeMissao) {
+        boolean missaoPendente = preferences.getBoolean(chave + hortela.getId(), true);
+
+        if (missaoPendente) {
+            hortela.adicionarMoedas(5);
+            txtMoedas.setText(hortela.getMoedas() + "x");
+
+            PlantaDAO dao = new PlantaDAO(getApplicationContext());
+            dao.atualizarMoedas(hortela);
+
+            editor.putBoolean(chave + hortela.getId(), false).apply();
+
+            Toast.makeText(this, "Missão de " + nomeMissao + " concluída! +5 moedas", Toast.LENGTH_SHORT).show();
+            textoMissao.setVisibility(View.GONE);
+        } else {
+            Toast.makeText(this, "Você já concluiu a missão de " + nomeMissao + " hoje.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // ----- PERMISSÕES -----
     private void checarPermissaoLocalizacao() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             obterLocalizacaoEClima();
@@ -135,6 +192,7 @@ public class Cuidar extends AppCompatActivity {
         }
     }
 
+    // ----- OBTÉM LOCALIZAÇÃO E CLIMA -----
     private void obterLocalizacaoEClima() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             txtClima.setText("Permissão de localização não concedida");
@@ -142,57 +200,46 @@ public class Cuidar extends AppCompatActivity {
             return;
         }
 
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(location -> {
-                    if (location != null) {
-                        double lat = location.getLatitude();
-                        double lon = location.getLongitude();
+        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                double lat = location.getLatitude();
+                double lon = location.getLongitude();
 
-                        String cidade = getCidadePorGeocoder(lat, lon);
-                        txtCidade.setText(cidade != null ? cidade : "Cidade não encontrada");
+                String cidade = getCidadePorGeocoder(lat, lon);
+                txtCidade.setText(cidade != null ? cidade : "Cidade não encontrada");
 
-                        ClimaUtil.obterClima(lat, lon, new ClimaUtil.ClimaCallback() {
-                            @Override
-                            public void onResultado(String cidade, String clima, double tempMin, double tempMax) {
-                                txtCidade.setText(cidade != null && !cidade.isEmpty() ? cidade : "Cidade não encontrada");
-                                txtClima.setText(clima + " - " + tempMin + "°C / " + tempMax + "°C");
+                ClimaUtil.obterClima(lat, lon, new ClimaUtil.ClimaCallback() {
+                    @Override
+                    public void onResultado(String cidade, String clima, double tempMin, double tempMax) {
+                        txtCidade.setText(cidade != null && !cidade.isEmpty() ? cidade : "Cidade não encontrada");
+                        txtClima.setText(clima + " - " + tempMin + "°C / " + tempMax + "°C");
 
-                                boolean chuva = clima.toLowerCase().contains("chuva"); // só um exemplo simples
+                        boolean chuva = clima.toLowerCase().contains("rain");
 
-                                Hortela hortela = new Hortela();
-                                int regas = hortela.qtdRegaPorDia((int) tempMin, (int) tempMax, chuva);
+                        int regas = hortela.qtdRegaPorDia((int) tempMin, (int) tempMax, chuva);
+                        int sol = hortela.qtdSolPorDia((int) tempMin, (int) tempMax, chuva);
 
-                                txtRegar.setText("Quantidade de regas hoje: " + regas);
-                            }
-
-
-
-
-                        @Override
-                            public void onErro(String mensagemErro) {
-                                txtClima.setText("Erro ao obter clima");
-                                txtCidade.setText("-");
-                                txtRegar.setText("Não foi possível calcular regas");
-                            }
-                        });
-
-
-
-                    } else {
-                        // Pode tentar getCurrentLocation (API 30+) para fallback
-                        txtClima.setText("Localização não encontrada");
-                        txtCidade.setText("-");
+                        txtRegar.setText("Quantidade de regas hoje: " + regas);
+                        txtSol.setText("Tomar " + sol + "h de sol");
+                        txtSombra.setText("Descansar o resto do dia na sombra");
                     }
-                })
-                .addOnFailureListener(e -> {
-                    txtClima.setText("Erro ao obter localização");
-                    txtCidade.setText("-");
+
+                    @Override
+                    public void onErro(String erro) {
+                        txtClima.setText(erro);
+                    }
                 });
+            } else {
+                txtClima.setText("Localização não encontrada");
+                txtCidade.setText("-");
+            }
+        });
     }
 
+    // ----- PEGA CIDADE PELO GEOCODER -----
     private String getCidadePorGeocoder(double lat, double lon) {
         try {
-            Geocoder geocoder = new Geocoder(this, new Locale("pt", "BR"));
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
             if (addresses != null && !addresses.isEmpty()) {
                 return addresses.get(0).getLocality();
@@ -201,5 +248,20 @@ public class Cuidar extends AppCompatActivity {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // ----- RESETAR MISSÕES DIARIAMENTE -----
+    private void resetarMissoesSeForNovoDia() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String dataHoje = sdf.format(new Date());
+        String dataUltimaMissao = preferences.getString("dataUltimaMissao", "");
+
+        if (!dataHoje.equals(dataUltimaMissao)) {
+            editor.putBoolean("regaPendente_" + hortela.getId(), true);
+            editor.putBoolean("solPendente_" + hortela.getId(), true);
+            editor.putBoolean("sombraPendente_" + hortela.getId(), true);
+            editor.putString("dataUltimaMissao", dataHoje);
+            editor.apply();
+        }
     }
 }

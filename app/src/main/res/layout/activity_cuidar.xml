@@ -98,19 +98,34 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="86dp" />
+            android:layout_height="51dp" />
 
         <TextView
             android:id="@+id/txtRegar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/btnExcluir"
+        <TextView
+            android:id="@+id/txtSol"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtSombra"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/imagemPlanta"
@@ -197,7 +212,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="111dp" />
+            android:layout_height="70dp" />
 
         <TextView
             android:id="@+id/textView6"

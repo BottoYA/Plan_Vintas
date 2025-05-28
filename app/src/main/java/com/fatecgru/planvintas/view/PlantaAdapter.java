@@ -53,6 +53,7 @@ public class PlantaAdapter extends RecyclerView.Adapter<PlantaAdapter.PlantaView
             intent.putExtra("nome_planta", planta.getNome());
             intent.putExtra("idade_planta", planta.getIdadeDias());
             intent.putExtra("moedas_planta", planta.getMoedas());
+            intent.putExtra("cor", planta.getCorVaso());
             context.startActivity(intent);
         });
     }

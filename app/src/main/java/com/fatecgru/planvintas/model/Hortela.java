@@ -41,6 +41,14 @@ public class Hortela extends Planta {
         return 1;
     }
 
+    public int qtdSolPorDia(int tempMin, int tempMax, boolean chuva) {
+        int temperatura = (tempMin+tempMax)/2;
+
+        if (temperatura < 15 && chuva) return 2;
+        else return 5;
+
+    }
+
 
 
 }
