@@ -11,15 +11,25 @@ import java.util.Locale;
 public class Planta {
     private int id;
     private String nome;
-    private int idadeDias;
+     int idadeDias;
     private int moedas;
-    private String corVaso;
+     String corVaso;
     private String especie;
     private String ultimaAtualizacao;
     private int qtdRegarHoje;
     private int qtdSolHoje;
     private int qtdSombraHoje;
     private List<Missao> missoes;
+    private boolean vasoAzul;
+
+
+    public boolean isVasoAzul() {
+        return vasoAzul;
+    }
+
+    public void setVasoAzul(boolean vasoAzul) {
+        this.vasoAzul = vasoAzul;
+    }
 
     public List<Missao> getMissoes() {
         return missoes;

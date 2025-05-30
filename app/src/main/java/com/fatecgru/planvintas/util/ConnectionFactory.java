@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ConnectionFactory extends SQLiteOpenHelper {
 
     private static final String NOME_BANCO = "bd_plantinhas";
-    private static final int VERSAO = 3;
+    private static final int VERSAO = 5;
 
     public ConnectionFactory(Context context) {
         super(context, NOME_BANCO, null, VERSAO);
@@ -25,7 +25,8 @@ public class ConnectionFactory extends SQLiteOpenHelper {
                 "qtdSolHoje INTEGER, " +
                 "qtdSombraHoje INTEGER, " +
                 "corVaso TEXT," +
-                "ultimaAtualizacao TEXT);";
+                "ultimaAtualizacao TEXT, "+
+                "azul BOOLEAN)";
 
         db.execSQL(sql);
 
@@ -42,7 +43,11 @@ public class ConnectionFactory extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 4) {  // Supondo que versão 4 é para missões
+        if (oldVersion < 4) {
+            db.execSQL("ALTER TABLE planta ADD COLUMN azul BOOLEAN DEFAULT 0");
+        }
+
+        if (oldVersion < 5) {
             String sqlMissao = "CREATE TABLE missao (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "descricao TEXT NOT NULL, " +
@@ -53,8 +58,8 @@ public class ConnectionFactory extends SQLiteOpenHelper {
                     ");";
             db.execSQL(sqlMissao);
         }
-        // Atualize a versão para 4 no seu NOME_BANCO, por exemplo.
     }
+
 
 
 }

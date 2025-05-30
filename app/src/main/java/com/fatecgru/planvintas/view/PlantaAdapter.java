@@ -40,11 +40,13 @@ public class PlantaAdapter extends RecyclerView.Adapter<PlantaAdapter.PlantaView
         holder.txtNome.setText(planta.getNome());
         holder.txtEspecie.setText(planta.getEspecie());
 
-        // Verificar se o método getImagemPlanta() está implementado na classe Planta e retorna um drawable válido
-        if (planta.getImagemPlanta() != 0) {
-            holder.imgPlanta.setImageResource(planta.getImagemPlanta());
+        // Chama o método que já retorna o drawable correto
+        int imagemPlanta = planta.getImagemPlanta();
+
+        if (imagemPlanta != 0) {
+            holder.imgPlanta.setImageResource(imagemPlanta);
         } else {
-            holder.imgPlanta.setImageResource(R.drawable.ic_launcher_foreground); // Imagem padrão caso não tenha
+            holder.imgPlanta.setImageResource(R.drawable.ic_launcher_foreground);
         }
 
         holder.itemView.setOnClickListener(v -> {

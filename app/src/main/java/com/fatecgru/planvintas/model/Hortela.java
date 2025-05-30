@@ -12,20 +12,24 @@ public class Hortela extends Planta {
         super(id, nome, idadeDias, especie, ultimaAtualizacao);
     }
 
-    @Override
-    public int getImagemPlanta() {
-        boolean vasoAzul = "azul".equalsIgnoreCase(getCorVaso());
 
-        if (getIdadeDias() <= 6) {
-            return vasoAzul ? R.drawable.plantaaazul : R.drawable.plantaa;
-        } else if (getIdadeDias() <= 15) {
-            return vasoAzul ? R.drawable.plantabazul : R.drawable.plantab;
-        } else if (getIdadeDias() <= 45) {
-            return vasoAzul ? R.drawable.plantacazul : R.drawable.plantac;
+    public int getImagemPlanta() {
+        String cor = corVaso != null ? corVaso : "marrom"; // Define padrão marrom caso venha nulo
+        int idade = idadeDias;
+
+        boolean azul = cor.equalsIgnoreCase("azul");
+
+        if (idade <= 5) {
+            return azul ? R.drawable.plantaaazul : R.drawable.plantaa;
+        } else if (idade <= 15) {
+            return azul ? R.drawable.plantabazul : R.drawable.plantab;
+        } else if (idade <= 45) {
+            return azul ? R.drawable.plantacazul : R.drawable.plantac;
         } else {
-            return vasoAzul ? R.drawable.plantadazul : R.drawable.plantad;
+            return azul ? R.drawable.plantadazul : R.drawable.plantad;
         }
     }
+
 
 
     public int qtdRegaPorDia(int tempMin, int tempMax, boolean chuva) {

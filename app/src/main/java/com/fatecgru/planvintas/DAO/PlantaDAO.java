@@ -32,10 +32,10 @@ public class PlantaDAO {
         valores.put("qtdSombraHoje", planta.getQtdSombraHoje());
         valores.put("corVaso", planta.getCorVaso());
         valores.put("ultimaAtualizacao", planta.getUltimaAtualizacao());
+        valores.put("azul", planta.isVasoAzul());
 
         banco.insert("planta", null, valores);
     }
-
 
     public List<Planta> listar() {
         List<Planta> lista = new ArrayList<>();
@@ -43,7 +43,7 @@ public class PlantaDAO {
                 "planta",
                 new String[]{"id", "nome", "idadeDias", "especie", "moedas",
                         "qtdRegarHoje", "qtdSolHoje", "qtdSombraHoje",
-                        "corVaso", "ultimaAtualizacao"},
+                        "corVaso", "ultimaAtualizacao", "azul"},
                 null, null, null, null, null
         );
 
@@ -80,8 +80,11 @@ public class PlantaDAO {
             p.setQtdSolHoje(cursor.getInt(6));
             p.setQtdSombraHoje(cursor.getInt(7));
 
-            p.atualizarIdadeSeNecessario();
+            // ✅ Pega o atributo azul
+            boolean vasoAzul = cursor.getInt(10) == 1;
+            p.setVasoAzul(vasoAzul);
 
+            p.atualizarIdadeSeNecessario();
             atualizar(p);
 
             lista.add(p);
@@ -89,8 +92,6 @@ public class PlantaDAO {
         cursor.close();
         return lista;
     }
-
-
 
     public void atualizar(Planta planta) {
         ContentValues valores = new ContentValues();
@@ -103,6 +104,7 @@ public class PlantaDAO {
         valores.put("qtdSombraHoje", planta.getQtdSombraHoje());
         valores.put("corVaso", planta.getCorVaso());
         valores.put("ultimaAtualizacao", planta.getUltimaAtualizacao());
+        valores.put("azul", planta.isVasoAzul());
 
         banco.update("planta", valores, "id = ?", new String[]{String.valueOf(planta.getId())});
     }
@@ -112,15 +114,15 @@ public class PlantaDAO {
         valores.put("moedas", hortela.getMoedas());
 
         int rows = banco.update("planta", valores, "id = ?", new String[]{String.valueOf(hortela.getId())});
-
         return rows > 0;
     }
+
     public Planta buscarPorId(int id) {
         Cursor cursor = banco.query(
                 "planta",
                 new String[]{"id", "nome", "idadeDias", "especie", "moedas",
                         "qtdRegarHoje", "qtdSolHoje", "qtdSombraHoje",
-                        "corVaso", "ultimaAtualizacao"},
+                        "corVaso", "ultimaAtualizacao", "azul"},
                 "id = ?",
                 new String[]{String.valueOf(id)},
                 null, null, null
@@ -159,6 +161,10 @@ public class PlantaDAO {
             p.setQtdSolHoje(cursor.getInt(6));
             p.setQtdSombraHoje(cursor.getInt(7));
 
+            // ✅ Pega o atributo azul
+            boolean vasoAzul = cursor.getInt(10) == 1;
+            p.setVasoAzul(vasoAzul);
+
             p.atualizarIdadeSeNecessario();
             atualizar(p);
 
@@ -170,15 +176,13 @@ public class PlantaDAO {
         return null;
     }
 
+    public void deletar(int id) {
+        banco.delete("planta", "id = ?", new String[]{String.valueOf(id)});
+    }
 
     public void close() {
         if (banco != null && banco.isOpen()) {
             banco.close();
         }
-    }
-
-
-    public void deletar(int id) {
-        banco.delete("planta", "id = ?", new String[]{String.valueOf(id)});
     }
 }
