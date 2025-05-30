@@ -54,5 +54,27 @@ public class Hortela extends Planta {
     }
 
 
+    public String nome(){
+        return "Tempo de Crescimento:\n" +
+                "- Germinação: 7 a 15 dias.\n" +
+                "- Crescimento inicial: 20 a 30 dias após germinar, já pode começar a desenvolver folhas.\n" +
+                "- Desenvolvimento pleno: 2 a 3 meses para uma planta bem formada.\n\n" +
+                "Como Cuidar em Casa e em Apartamento:\n" +
+                "Casa:\n" +
+                "- Cultivo em canteiros ou vasos.\n" +
+                "- Meia-sombra ou sol da manhã.\n" +
+                "- Cresce bem em jardins, hortas e varandas.\n\n" +
+                "Apartamento:\n" +
+                "- Vasos médios a grandes.\n" +
+                "- Varandas, sacadas ou janelas bem iluminadas.\n" +
+                "- Pode usar luz artificial (lâmpadas de cultivo).\n\n" +
+                "Curiosidades:\n" +
+                "- Planta perene.\n" +
+                "- Invasiva no solo.\n" +
+                "- Atrai abelhas e borboletas.\n" +
+                "- Propriedades digestivas e refrescantes.";
+    }
+
+
 
 }

@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#DCE9BE"
         android:orientation="vertical">
 
         <LinearLayout
@@ -40,17 +41,22 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="32dp" />
+            android:layout_height="12dp" />
 
         <EditText
-            android:id="@+id/editTextText"
-            android:layout_width="match_parent"
+            android:id="@+id/txtInfor"
+            android:layout_width="371dp"
             android:layout_height="match_parent"
-            android:background="#B5BF8F"
+            android:layout_gravity="center"
+            android:editable="false"
             android:ems="10"
-            android:gravity="top"
-            android:inputType="text"
-            android:text="Teste"
-            android:textColor="#223423" />
+            android:enabled="false"
+            android:gravity="start|top"
+            android:hint="Curiosidades"
+            android:inputType="textMultiLine"
+            android:textColor="@color/black"
+            android:textColorHighlight="@color/black"
+            android:textColorHint="@color/black" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

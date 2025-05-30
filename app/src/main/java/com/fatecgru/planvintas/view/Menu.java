@@ -173,4 +173,11 @@ public class Menu extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onResume(){
+
+        super.onResume();
+        carregarPlantas();
+    }
 }

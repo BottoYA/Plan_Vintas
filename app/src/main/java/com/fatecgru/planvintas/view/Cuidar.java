@@ -136,11 +136,7 @@ public class Cuidar extends AppCompatActivity {
 
         btnVoltar2.setOnClickListener(v -> finish());
 
-        /*btnExcluir.setOnClickListener(v -> {
-            PlantaDAO dao = new PlantaDAO(getApplicationContext());
-            dao.deletar(hortela.getId());
-            finish();
-        });*/
+
 
         // ----- LOCALIZAÇÃO E CLIMA -----
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -264,4 +260,16 @@ public class Cuidar extends AppCompatActivity {
             editor.apply();
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        PlantaDAO dao = new PlantaDAO(getApplicationContext());
+        hortela = (Hortela) dao.buscarPorId(hortela.getId());
+
+        imagemPlanta.setImageResource(hortela.getImagemPlanta());
+        txtMoedas.setText(hortela.getMoedas() + "x");
+    }
+
 }
